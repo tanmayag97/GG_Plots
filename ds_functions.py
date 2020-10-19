@@ -1,3 +1,4 @@
+#List of functions for using GG plots primarily for Fastai Random Forest
 import numpy as np
 from sklearn.ensemble import forest
 import pandas as pd
@@ -72,7 +73,7 @@ def get_sample(df,n):
     idxs = sorted(np.random.permutation(len(df))[:n])
     return df.iloc[idxs].copy()
 
-
+#automatically preprocesses dataset for you
 def proc_df(df, y_fld=None, skip_flds=None, ignore_flds=None, do_scale=False, na_dict=None,
             preproc_fn=None, max_n_cat=None, subset=None, mapper=None):
     """ proc_df takes a data frame df and splits off the response variable, and
@@ -193,6 +194,7 @@ def proc_df(df, y_fld=None, skip_flds=None, ignore_flds=None, do_scale=False, na
     if do_scale: res = res + [mapper]
     return res
 
+#fixes missing values by replacing them with mean of the column
 def fix_missing(df, col, name, na_dict):
     """ Fill missing data in a column of df with the median, and add a {name}_na column
     which specifies if the data was missing.
@@ -265,6 +267,7 @@ def fix_missing(df, col, name, na_dict):
             na_dict[name] = filler
     return na_dict
 
+#converts categorical data into numerical data 
 def numericalize(df, col, name, max_n_cat):
     """ Changes the column col from a categorical type to it's integer codes.
 
@@ -325,7 +328,7 @@ def reset_rf_samples():
     forest._generate_sample_indices = (lambda rs, n_samples:
         forest.check_random_state(rs).randint(0, n_samples, n_samples))
     
-    
+#function to convert a column having date in datetime64 format to various columns related to date and time like the week number, national holidays etc   
 def add_datepart(df, fldname, drop=True, time=False):
     """add_datepart converts a column of df from a datetime64 to many columns containing
     the information from the date. This applies changes inplace.
